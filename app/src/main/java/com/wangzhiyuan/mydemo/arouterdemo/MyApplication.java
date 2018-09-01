@@ -14,6 +14,6 @@ public class MyApplication extends Application {
     private void ARouterInit(){
         ARouter.openLog();
         ARouter.openDebug();
-//        ARouter.init(this);
+        ARouter.init(this);
     }
 }

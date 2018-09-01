@@ -14,6 +14,7 @@ import android.view.Window;
 
 import com.wangzhiyuan.mydemo.R;
 import com.wangzhiyuan.ui.recyclerview.ArrayAdapter;
+import com.wangzhiyuan.ui.recyclerview.ArrayAdapter2;
 import com.wangzhiyuan.ui.recyclerview.PandaRefreshHeader;
 import com.wangzhiyuan.ui.recyclerview.RefreshLayout;
 
@@ -24,7 +25,9 @@ public class RecyclerActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RefreshLayout mRefreshLayout;
     private ArrayAdapter mArrayAdapter;
+    private ArrayAdapter2 mArrayAdapter2;
     private ArrayList<String> mArrayList = new ArrayList<>();
+    private int index = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +37,12 @@ public class RecyclerActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.pull_recyclerview);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        for (int i = 0; i < 10; i++) {
-            mArrayList.add("这是第" + i + "条数据");
+        for (int i = 0; i < 30; i++) {
+            mArrayList.add("这是第" + index + "条数据");
+            index++;
         }
         mArrayAdapter = new ArrayAdapter(this, mArrayList);
+        mArrayAdapter2 = new ArrayAdapter2(this, mArrayList);
         PandaRefreshHeader panda = new PandaRefreshHeader(this);
         mRefreshLayout.setRefreshHeader(panda);
         mRecyclerView.setAdapter(mArrayAdapter);
@@ -55,7 +60,38 @@ public class RecyclerActivity extends AppCompatActivity {
                     }, 500);
                 }
             });
+
         }
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                //当前RecyclerView显示出来的最后一个的item的position
+                int lastPosition = -1;
+
+                if(newState == RecyclerView.SCROLL_STATE_IDLE){
+                    RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                    if(layoutManager instanceof LinearLayoutManager){
+                        lastPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+                    }
+
+                    if(lastPosition == recyclerView.getLayoutManager().getItemCount()-1){
+                        for (int i = 0; i < 10; i++) {
+                            mArrayAdapter.addData("这是第" +index + "条数据");
+                            index++;
+                        }
+                        recyclerView.getAdapter().notifyDataSetChanged();
+                        mArrayAdapter.notifyItemRemoved(mArrayAdapter.getItemCount()-1);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
     }
 
     @Override
@@ -67,12 +103,15 @@ public class RecyclerActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_1) {
+            mRecyclerView.setAdapter(mArrayAdapter);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             return true;
         } else if (item.getItemId() == R.id.action_2) {
+            mRecyclerView.setAdapter(mArrayAdapter);
             mRecyclerView.setLayoutManager(new GridLayoutManager(RecyclerActivity.this, 3));
             return true;
         } else if (item.getItemId() == R.id.action_3) {
+            mRecyclerView.setAdapter(mArrayAdapter2);
             mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL));
             return true;
         }

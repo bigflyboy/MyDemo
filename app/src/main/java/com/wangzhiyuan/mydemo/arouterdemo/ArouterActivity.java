@@ -11,10 +11,14 @@ import com.wangzhiyuan.mydemo.R;
 
 public class ArouterActivity extends Activity {
 
+    private static Activity activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arouter);
+
+        activity = this;
     }
 
     public void onClick(View v){
@@ -23,8 +27,13 @@ public class ArouterActivity extends Activity {
         } else if(v.getId() == R.id.activity_module){
             ARouter.getInstance().build("/module1/activity").navigation();
         } else if (v.getId() == R.id.activity_init){
-            ARouter.init(getApplication());
+            ARouter.getInstance().build("/module2/activity").navigation();
+        } else if (v.getId() == R.id.open_module2_n){
+            ARouter.getInstance().build("/module2/activityn").navigation();
         }
     }
 
+    public static Activity getThis() {
+        return activity;
+    }
 }
