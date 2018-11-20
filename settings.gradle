@@ -1,1 +1,1 @@
-include ':app', ':module1', ':lib_annotation', ':refreshmodule', ':module2'
+include ':app', ':module1', ':lib_annotation', ':refreshmodule', ':module2', ':learnsource'

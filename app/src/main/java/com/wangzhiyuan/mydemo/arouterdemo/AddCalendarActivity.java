@@ -2,10 +2,8 @@ package com.wangzhiyuan.mydemo.arouterdemo;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
@@ -14,7 +12,6 @@ import com.wangzhiyuan.mydemo.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class AddCalendarActivity extends Activity {
